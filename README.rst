@@ -29,6 +29,7 @@ environment and use ".haml" as extension for your templates.
 
     env = Environment(extensions=[HamlishExtension])
 
+
 Configuration
 -------------
 
@@ -41,13 +42,13 @@ hamlish_mode:
 
 A string, it can be one of the following:
 
-**compact** mode (default):
-    Whitespace will be removed.
+compact:
+    Whitespace will be removed. This is the default
 
-**indented** mode:
+indented:
     The code will be nicely indented.
 
-**debug** mode:
+debug:
     The output will be similar to the haml syntax so that
     if you get a syntax error from jinja the debug message
     should display the correct line and source hint.
@@ -67,6 +68,7 @@ Example::
     env.hamlish_file_extensions=('.haml',)
 
 
+
 Syntax
 ======
 
@@ -83,6 +85,7 @@ Html tags
                 Tag Content
 
 ::
+
     <html>
         <body>
             <div>
@@ -117,6 +120,7 @@ Inline content
     %div << Tag Content
 
 ::
+
     <div>Tag Content</div>
 
 
@@ -147,12 +151,14 @@ Long lines can be split over many lines by ending the line with "\"
 The indent of the line after the "\" will be ignored.
 
 ::
+
     %div style="background: red;\
             color: blue; \
             text-decoration: underline;"
         Tag Content
 
 ::
+
     <div style="background: red;color: blue; text-decoration: underline;">
         Tag Content
     </div>
@@ -166,9 +172,11 @@ Lines that start with one of the special characters can
 be escaped with "\"
 
 ::
+
     \%div
 
 ::
+
     %div
 
 
@@ -179,6 +187,7 @@ Jinja tags
 Jinja tags starts with "-"
 
 ::
+
     -extends "layout.haml"
 
     %ul
@@ -188,6 +197,7 @@ Jinja tags starts with "-"
             %li << No users
 
 ::
+
     {% extends "layout.haml" %}
 
     <ul>
@@ -207,6 +217,7 @@ Variables can be output directly in content by using the normal
 or = can be used to output a variable on beginning of lines.
 
 ::
+
     -macro input(type, value):
         %input type="{{ type }}" value="{{ value }}".
 
@@ -215,6 +226,7 @@ or = can be used to output a variable on beginning of lines.
             =input(type="text", value="Test")
 
 ::
+
     {% macro input(type, value): %}
         <input type="{{ type }}" value="{{ value }}" />
     {% endmacro %}
@@ -231,11 +243,13 @@ Preformatted lines
 ------------------
 
 ::
+
     %pre
         |def test(name):
         |    print name
 
 ::
+
         <pre>
     def test(name):
         print name
@@ -248,6 +262,7 @@ Example Template
 ================
 
 ::
+
     -extends "base.haml"
     -import "lib/forms.haml" as forms
 
@@ -261,7 +276,26 @@ Example Template
                 =forms.input(form.password, type="password")
 
             %p
-                %input type="submit" value="Login".
+                %input type="submit" value="Login"
 
 
+::
 
+    {% extends "base.haml" %}
+    {% import "lib/forms.haml" as forms %}
+
+    {% block title %}Page Title{% endblock %}
+
+    {% block content: %}
+        {% call forms.form_frame(form): %}
+            <p>
+                {{ forms.input(form.username, type="text") }}
+            </p>
+            <p>
+                {{ forms.input(form.password, type="password") }}
+            </p>
+            <p>
+                <input type="submit" value="Login" />
+            </p>
+        {% endcall %}
+    {% endblock %}
