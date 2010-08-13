@@ -74,6 +74,12 @@ Syntax
 
 The syntax is similar to haml.
 
+You can use tabs or spaces for indentation, but you can't mix them
+on the same line.
+It is possible to mix tabs and spaces on separate lines if you
+know what you are doing, but it't not recommended.
+
+
 Html tags
 ---------
 
