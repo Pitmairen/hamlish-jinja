@@ -147,8 +147,8 @@ br, img, link, hr, meta, input
 Continued lines
 ----------------
 
-Long lines can be split over many lines by ending the line with "\"
-The indent of the line after the "\" will be ignored.
+Long lines can be split over many lines by ending the line with "\\"
+The indent of the line after the "\\" will be ignored.
 
 ::
 
@@ -169,7 +169,7 @@ Escaped lines
 --------------
 
 Lines that start with one of the special characters can
-be escaped with "\"
+be escaped with "\\"
 
 ::
 
@@ -250,10 +250,10 @@ Preformatted lines
 
 ::
 
-        <pre>
+    <pre>
     def test(name):
         print name
-        </pre>
+    </pre>
 
 
 
@@ -274,7 +274,6 @@ Example Template
                 =forms.input(form.username, type="text")
             %p
                 =forms.input(form.password, type="password")
-
             %p
                 %input type="submit" value="Login"
 
