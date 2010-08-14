@@ -19,7 +19,7 @@ Usage
 Install
 --------
 
-You can install the latest verson with
+You can install the latest version with
 `easy_install <http://peak.telecommunity.com/DevCenter/EasyInstall>`_
 or
 `pip <http://pypi.python.org/pypi/pip>`_
