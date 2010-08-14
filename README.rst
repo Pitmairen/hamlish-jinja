@@ -5,7 +5,7 @@ Hamlish-jinja
 Overview
 ========
 
-This extension to jinja make it posible to use a haml-ish
+This extension to jinja make it possible to use a haml-ish
 syntax for your jinja templates.
 
 It is implemented as a preprocessor and so it runs only
@@ -220,7 +220,7 @@ Jinja Variables
 
 Variables can be output directly in content by using the normal
 {{ }} syntax.
-or = can be used to output a variable on beginning of lines.
+or "=" can be used to output a variable on beginning of lines.
 
 ::
 
