@@ -1,2 +1,3 @@
 include LICENCE README.rst
 recursive-include tests *
+global-exclude *pyc
