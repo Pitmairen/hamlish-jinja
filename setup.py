@@ -33,6 +33,7 @@ setup(
     install_requires=['Jinja2'],
     zip_safe=False,
     keywords = "jinja2 templates haml",
+    platforms='any',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
