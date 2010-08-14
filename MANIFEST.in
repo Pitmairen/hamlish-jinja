@@ -1,0 +1,2 @@
+include LICENCE README.rst
+recursive-include tests *
