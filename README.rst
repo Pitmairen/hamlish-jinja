@@ -16,6 +16,20 @@ run.
 Usage
 =====
 
+Install
+--------
+
+You can install the latest verson with
+`easy_install <http://peak.telecommunity.com/DevCenter/EasyInstall>`_
+or
+`pip <http://pypi.python.org/pypi/pip>`_
+
+::
+
+    easy_install Hamlish-Jinja
+    pip install Hamlish-Jinja
+
+
 Basic Usage
 -----------
 
