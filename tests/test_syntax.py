@@ -143,5 +143,335 @@ def test(name):
 
         self.assertEqual(s, r)
 
+
+    def test_div_class_shortcut(self):
+        s = self._h('''
+.test
+    Test
+''')
+        r = '''\
+<div class="test">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+
+    def test_div_class_shortcut_inline_data(self):
+        s = self._h('''.test << Test''')
+        r = '''<div class="test">Test</div>'''
+        self.assertEqual(s, r)
+
+
+    def test_div_id_shortcut(self):
+        s = self._h('''
+#test
+    Test
+''')
+        r = '''\
+<div id="test">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+
+    def test_div_id_shortcut_inline_data(self):
+        s = self._h('''#test << Test''')
+        r = '''<div id="test">Test</div>'''
+        self.assertEqual(s, r)
+
+
+
+    def test_div_multiple_class_shortcut(self):
+        s = self._h('''
+.test.test2
+    Test
+''')
+        r = '''\
+<div class="test test2">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+    def test_div_multiple_class_shortcut_inline_data(self):
+        s = self._h('''.test.test2 << Test''')
+        r = '''<div class="test test2">Test</div>'''
+        self.assertEqual(s, r)
+
+
+    def test_div_multiple_id_shortcut(self):
+        s = self._h('''
+#test#test2
+    Test
+''')
+        r = '''\
+<div id="test test2">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+    def test_div_multiple_id_shortcut_inline_data(self):
+        s = self._h('''#test#test2 << Test''')
+        r = '''<div id="test test2">Test</div>'''
+        self.assertEqual(s, r)
+
+
+    def test_div_mixed_class_id_shortcut(self):
+        s = self._h('''
+#test.test
+    Test
+.test#test
+    Test
+.test#test.test2
+    Test
+#test.test#test2
+    Test
+#test#test2.test#test3.test2
+    Test
+''')
+        r = '''\
+<div id="test" class="test">
+  Test
+</div>
+<div class="test" id="test">
+  Test
+</div>
+<div class="test test2" id="test">
+  Test
+</div>
+<div id="test test2" class="test">
+  Test
+</div>
+<div id="test test2 test3" class="test test2">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+    def test_div_multiple_id_shortcut_inline_data(self):
+        s = self._h('''
+#test.test << Test
+.test#test << Test
+.test.test2#test << Test
+.test#test.test2 << Test
+''')
+        r = '''\
+<div id="test" class="test">Test</div>
+<div class="test" id="test">Test</div>
+<div class="test test2" id="test">Test</div>
+<div class="test test2" id="test">Test</div>\
+'''
+        self.assertEqual(s, r)
+
+
+    def test_tag_class_shortcut(self):
+        s = self._h('''
+%div.test
+    Test
+''')
+        r = '''\
+<div class="test">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+
+
+
+    def test_tag_class_shortcut_inline_data(self):
+        s = self._h('''%div.test << Test''')
+        r = '''<div class="test">Test</div>'''
+        self.assertEqual(s, r)
+
+
+    def test_tag_id_shortcut(self):
+        s = self._h('''
+%div#test
+    Test
+''')
+        r = '''\
+<div id="test">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+
+    def test_tag_id_shortcut_inline_data(self):
+        s = self._h('''%div#test << Test''')
+        r = '''<div id="test">Test</div>'''
+        self.assertEqual(s, r)
+
+
+
+    def test_tag_multiple_class_shortcut(self):
+        s = self._h('''
+%div.test.test2
+    Test
+''')
+        r = '''\
+<div class="test test2">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+    def test_tag_multiple_class_shortcut_inline_data(self):
+        s = self._h('''%div.test.test2 << Test''')
+        r = '''<div class="test test2">Test</div>'''
+        self.assertEqual(s, r)
+
+
+    def test_tag_multiple_id_shortcut(self):
+        s = self._h('''
+%div#test#test2
+    Test
+''')
+        r = '''\
+<div id="test test2">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+    def test_tag_multiple_id_shortcut_inline_data(self):
+        s = self._h('''%div#test#test2 << Test''')
+        r = '''<div id="test test2">Test</div>'''
+        self.assertEqual(s, r)
+
+
+    def test_tag_mixed_class_id_shortcut(self):
+        s = self._h('''
+%div#test.test
+    Test
+%div.test#test
+    Test
+%div.test#test.test2
+    Test
+%div#test.test#test2
+    Test
+%div#test#test2.test#test3.test2
+    Test
+''')
+        r = '''\
+<div id="test" class="test">
+  Test
+</div>
+<div class="test" id="test">
+  Test
+</div>
+<div class="test test2" id="test">
+  Test
+</div>
+<div id="test test2" class="test">
+  Test
+</div>
+<div id="test test2 test3" class="test test2">
+  Test
+</div>\
+'''
+        self.assertEqual(s, r)
+
+    def test_div_multiple_id_shortcut_inline_data(self):
+        s = self._h('''
+%div#test.test << Test
+%div.test#test << Test
+%div.test.test2#test << Test
+%div.test#test.test2 << Test
+''')
+        r = '''\
+<div id="test" class="test">Test</div>
+<div class="test" id="test">Test</div>
+<div class="test test2" id="test">Test</div>
+<div class="test test2" id="test">Test</div>\
+'''
+        self.assertEqual(s, r)
+
+
+
+    def test_mixed_shortcut_normal(self):
+        s = self._h('''
+#test class="test"
+    Test
+''')
+        r = '''\
+<div id="test" class="test">
+  Test
+</div>'''
+        self.assertEqual(s, r)
+
+    def test_mixed_shortcut_normal2(self):
+        s = self._h('''
+.test.test2 id="test"
+    Test
+''')
+        r = '''\
+<div class="test test2" id="test">
+  Test
+</div>'''
+        self.assertEqual(s, r)
+
+    def test_mixed_shortcut_normal3(self):
+        s = self._h('''
+%div#test class="test"
+    Test
+''')
+        r = '''\
+<div id="test" class="test">
+  Test
+</div>'''
+        self.assertEqual(s, r)
+
+    def test_mixed_shortcut_normal4(self):
+        s = self._h('''
+%div.test.test2 id="test"
+    Test
+''')
+        r = '''\
+<div class="test test2" id="test">
+  Test
+</div>'''
+        self.assertEqual(s, r)
+
+    def test_mixed_shortcut_normal_inline_data(self):
+        s = self._h('''#test class="test" << Test''')
+        r = '''<div id="test" class="test">Test</div>'''
+        self.assertEqual(s, r)
+
+    def test_mixed_shortcut_normal_inline_data2(self):
+        s = self._h('''.test.test2 id="test" << Test''')
+        r = '''<div class="test test2" id="test">Test</div>'''
+        self.assertEqual(s, r)
+
+    def test_mixed_shortcut_normal_inline_data3(self):
+        s = self._h('''%div#test class="test" << Test''')
+        r = '''<div id="test" class="test">Test</div>'''
+        self.assertEqual(s, r)
+
+    def test_mixed_shortcut_normal_inline_data4(self):
+        s = self._h('''%div.test.test2 id="test" << Test''')
+        r = '''<div class="test test2" id="test">Test</div>'''
+        self.assertEqual(s, r)
+
+
+    def test_shortcut_self_closing(self):
+        s = self._h('''%div#test.''')
+        r = '''<div id="test" />'''
+        self.assertEqual(s, r)
+
+    def test_shortcut_self_closing2(self):
+        s = self._h('''%div#test.test.''')
+        r = '''<div id="test" class="test" />'''
+        self.assertEqual(s, r)
+
+    def test_shortcut_self_closing3(self):
+        s = self._h('''%div#test class="test".''')
+        r = '''<div id="test" class="test" />'''
+        self.assertEqual(s, r)
+
 if __name__ == '__main__':
     unittest.main()

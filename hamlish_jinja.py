@@ -71,6 +71,8 @@ class Hamlish(object):
     ESCAPE_LINE = '\\'
     PREFORMATED_LINE = '|'
     CONTINUED_LINE = '\\'
+    ID_SHORTCUT = '#'
+    CLASS_SHORTCUT = '.'
 
 
     # This is tags that can be continued on the same indent level
@@ -223,6 +225,10 @@ class Hamlish(object):
                 continued_block = self.close_continued_block(continued_block, depth)
                 self.parse_preformated_block(block, depth)
 
+            elif block[1][0] == self.ID_SHORTCUT or block[1][0] == self.CLASS_SHORTCUT:
+                continued_block = self.close_continued_block(continued_block, depth)
+                self.parse_shortcuts(block, depth)
+
             #data block
             else:
                 continued_block = self.close_continued_block(continued_block, depth)
@@ -333,6 +339,9 @@ class Hamlish(object):
 
         attrs = attrs.rstrip()
 
+        if attrs and attrs[0] in (self.ID_SHORTCUT, self.CLASS_SHORTCUT):
+            attrs = self._parse_shortcut_attributes(attrs)
+
         if self_closing and (data or block[2]):
             raise TemplateSyntaxError("Self closing tags can't have content", block[0])
 
@@ -369,6 +378,13 @@ class Hamlish(object):
         self.create_output(block[2], depth + 1)
 
 
+    def parse_shortcuts(self, block, depth):
+
+        new_block = (block[0], '%div'+block[1], block[2])
+
+        self.parse_html_block(new_block, depth)
+
+
     def _close_block(self, depth, close_callback):
         if not self.debug:
             self.output.indent(depth)
@@ -386,6 +402,38 @@ class Hamlish(object):
 
         if not self.debug:
             self.output.newline()
+
+
+    def _parse_shortcut_attributes(self, value):
+        extra_attrs = ''
+        if ' ' in value:
+            value, extra_attrs = value.split(' ', 1)
+
+        match = re.findall(r'([\.#]\w+)', value)
+
+        classes = []
+        ids = []
+        #We make the class and id the same order as in the template
+        if value[0] == self.CLASS_SHORTCUT:
+            attrs = (('class', classes), ('id', ids))
+        else:
+            attrs = (('id', ids), ('class', classes))
+
+        for m in match:
+            if m[0] == self.CLASS_SHORTCUT:
+                classes.append(m[1:])
+            else:
+                ids.append(m[1:])
+
+        rv = ' '.join('%s="%s"' % (k, ' '.join(v))
+                for k, v in attrs if v)
+
+        if extra_attrs:
+            rv += ' ' + extra_attrs
+
+        if rv:
+            return ' ' + rv
+        return rv
 
 
 class Output(object):
