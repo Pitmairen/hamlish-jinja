@@ -132,6 +132,49 @@ Attributes are just like normal html attributes.
     </div>
 
 
+There is also a shortcut for creating classes and ids.
+
+::
+
+    %div#myid.myclass
+        Tag Content
+
+::
+
+    <div id="myid" class="myclass">
+        Tag Content
+    </div>
+
+Multiple classes and ids can be chained together in 
+any order.
+
+::
+
+    %div#myid.myclass.myclass2
+        Tag Content
+
+::
+
+    <div id="myid" class="myclass myclass2">
+        Tag Content
+    </div>
+
+
+If these shortcuts are used at the beginning of a line
+a div is automatically created.
+
+::
+
+    #myid.myclass
+        Tag Content
+
+::
+
+    <div id="myid" class="myclass">
+        Tag Content
+    </div>
+
+
 Inline content
 ---------------
 
