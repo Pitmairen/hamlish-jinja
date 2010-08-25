@@ -267,7 +267,11 @@ class Hamlish(object):
 
         line = block[1][1:]
 
-        name = re.match('^(\w+)(.*)$', line).group(1)
+        m = re.match('^(\w+)(.*)$', line)
+        if m is None:
+            raise TemplateSyntaxError('Expected jinja tag, got "%s".' % line, block[0])
+
+        name = m.group(1)
 
         if continued_block is not None:
             if name not in self.continued_jinja_tags:
@@ -315,6 +319,9 @@ class Hamlish(object):
     def parse_html_block(self, block, depth):
 
         m = re.match('^(\w+)(.*)$', block[1][1:])
+
+        if m is None:
+            raise TemplateSyntaxError('Expected html tag, got "%s".' % block[1][1:], block[0])
 
         tag = m.group(1)
         attrs = m.group(2)
