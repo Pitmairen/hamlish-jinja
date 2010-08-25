@@ -473,5 +473,98 @@ def test(name):
         r = '''<div id="test" class="test" />'''
         self.assertEqual(s, r)
 
+
+
+
+    def test_line_comment(self):
+        s = self._h(''';Test''')
+        r = ''
+        self.assertEqual(s, r)
+
+
+    def test_line_comment2(self):
+        s = self._h('''
+;%div
+    %p << Test
+''')
+        r = '''\
+<p>Test</p>\
+'''
+        self.assertEqual(s, r)
+
+    def test_line_comment3(self):
+        s = self._h('''
+%html
+    ;%body
+        ;%div
+            %p << Test
+''')
+        r = '''\
+<html>
+  <p>Test</p>
+</html>\
+'''
+        self.assertEqual(s, r)
+
+    def test_line_comment4(self):
+        s = self._h('''
+%html
+    ;%body
+        ;%div
+            ;%p << Test
+''')
+        r = '''\
+<html>
+</html>\
+'''
+        self.assertEqual(s, r)
+
+    def test_line_comment5(self):
+        s = self._h('''
+%html
+    ;%body
+        ;%div
+    %p << Test
+''')
+        r = '''\
+<html>
+  <p>Test</p>
+</html>\
+'''
+        self.assertEqual(s, r)
+
+    def test_line_comment6(self):
+        s = self._h('''
+%html
+    ;%body
+        %div
+            ;%ul
+                ;%li << Test
+            %ul
+                %li << Test
+''')
+        r = '''\
+<html>
+  <div>
+    <ul>
+      <li>Test</li>
+    </ul>
+  </div>
+</html>\
+'''
+        self.assertEqual(s, r)
+
+    def test_line_comment_no_continued_line(self):
+        s = self._h('''
+%div
+    ;Test \\
+    %p << Test
+''')
+        r = '''\
+<div>
+  <p>Test</p>
+</div>\
+'''
+        self.assertEqual(s, r)
 if __name__ == '__main__':
     unittest.main()

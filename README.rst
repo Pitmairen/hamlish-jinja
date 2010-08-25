@@ -319,6 +319,25 @@ Preformatted lines
     </pre>
 
 
+Line comments
+-------------
+
+Single lines can be commented by starting the line with a ";".
+The lines will not be in the output.
+
+::
+
+    ;Test comment
+    ;Test commnet
+    %div
+        ;%div
+            Tag Content
+
+::
+
+    <div>
+        Tag Content
+    </div>
 
 
 Example Template
@@ -326,6 +345,8 @@ Example Template
 
 ::
 
+    ;This is a test template
+    ;to show the syntax
     -extends "base.haml"
     -import "lib/forms.haml" as forms
 

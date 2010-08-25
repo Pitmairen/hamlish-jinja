@@ -73,7 +73,7 @@ class Hamlish(object):
     CONTINUED_LINE = '\\'
     ID_SHORTCUT = '#'
     CLASS_SHORTCUT = '.'
-
+    LINE_COMMENT = ';'
 
     # This is tags that can be continued on the same indent level
     # as the starting tag.
@@ -131,7 +131,7 @@ class Hamlish(object):
 
             new_block = []
 
-            if line[-1] == self.CONTINUED_LINE:
+            if line[-1] == self.CONTINUED_LINE and line.lstrip()[0] != self.LINE_COMMENT:
                 if continued_line is None:
                     continued_line = (lineno, [line[:-1]], [])
                 else:
@@ -191,6 +191,18 @@ class Hamlish(object):
             if self.debug and block[1] == '##empty_line##':
                 self.output.newline()
                 continue
+
+            #line comment
+            elif block[1][0] == self.LINE_COMMENT:
+                continued_block = self.close_continued_block(continued_block, depth)
+
+                if self.debug:
+                    self.output.newline()
+
+                # We remove one indent level for the block below the comment
+                # so whe won't add 1 to depth.
+                self.create_output(block[2], depth)
+
             #jinja tag
             elif block[1][0] == self.JINJA_TAG:
 
