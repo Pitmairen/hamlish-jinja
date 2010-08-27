@@ -23,6 +23,7 @@ class HamlishExtension(Extension):
             hamlish_indent_string='    ',
             hamlish_newline_string='\n',
             hamlish_debug=False,
+            hamlish_enable_div_shortcut=False,
         )
 
 
@@ -50,7 +51,8 @@ class HamlishExtension(Extension):
             output = Output(indent_string=self.environment.hamlish_indent_string,
                         newline_string=self.environment.hamlish_newline_string)
 
-        return Hamlish(output, mode == 'debug')
+        return Hamlish(output, mode == 'debug',
+                self.environment.hamlish_enable_div_shortcut)
 
 
 
@@ -96,9 +98,10 @@ class Hamlish(object):
 
 
 
-    def __init__(self, output, debug=False):
+    def __init__(self, output, debug=False, use_div_shortcut=False):
         self.output = output
         self.debug = debug
+        self._use_div_shortcut = use_div_shortcut
 
 
     def convert_source(self, source):
@@ -237,7 +240,8 @@ class Hamlish(object):
                 continued_block = self.close_continued_block(continued_block, depth)
                 self.parse_preformated_block(block, depth)
 
-            elif block[1][0] == self.ID_SHORTCUT or block[1][0] == self.CLASS_SHORTCUT:
+            elif block[1][0] == self.ID_SHORTCUT or block[1][0] == self.CLASS_SHORTCUT \
+                and self._use_div_shortcut:
                 continued_block = self.close_continued_block(continued_block, depth)
                 self.parse_shortcuts(block, depth)
 

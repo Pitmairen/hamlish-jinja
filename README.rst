@@ -82,6 +82,17 @@ Example::
     env.hamlish_file_extensions=('.haml',)
 
 
+hamlish_enable_div_shortcut:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This enables the div shortcut so you can create div tags with a id or class
+by using only the id (#myid) or class (.myclass) at the beginning of a line.
+
+This is disabled by default.
+
+Example::
+    env.hamlish_enable_div_shortcut=True
+
 
 Syntax
 ======
