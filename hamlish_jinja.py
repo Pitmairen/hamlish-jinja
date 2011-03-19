@@ -366,7 +366,13 @@ class Hamlish(object):
             attrs = self._parse_shortcut_attributes(attrs)
 
         if self_closing and (data or block[2]):
-            raise TemplateSyntaxError("Self closing tags can't have content", block[0])
+            if not self.debug:
+                raise TemplateSyntaxError("Self closing tags can't have content", block[0])
+            else:
+                #In debug mode a self closing tag can contain empty lines
+                #if it contains something other than empty lines, throw an error.
+                if filter(lambda b: b[1] != '##empty_line##', block[2]):
+                    raise TemplateSyntaxError("Self closing tags can't have content", block[0])
 
         if self_closing:
             self.output.self_closing_html(tag, attrs)

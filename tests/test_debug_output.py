@@ -172,6 +172,10 @@ def test(name):
         self.assertEqual(s, r)
 
 
+    def test_self_closing_tag_with_empty_lines_bellow(self):
+
+        self._h('''%br\n\n\n''')
+
 
 if __name__ == '__main__':
     unittest.main()
