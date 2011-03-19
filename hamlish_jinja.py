@@ -38,7 +38,7 @@ class HamlishExtension(Extension):
         except TemplateIndentationError, e:
             raise TemplateSyntaxError(e.message, e.lineno, name=name, filename=filename)
         except TemplateSyntaxError, e:
-            raise TemplateSyntaxError(e.msg, e.lineno, name=name, filename=filename)
+            raise TemplateSyntaxError(e.message, e.lineno, name=name, filename=filename)
 
 
     def get_preprocessor(self, mode):
