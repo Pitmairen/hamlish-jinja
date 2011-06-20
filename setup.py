@@ -23,7 +23,7 @@ from setuptools import setup
 
 setup(
     name='Hamlish-Jinja',
-    version='0.1.0',
+    version='0.1.1',
     description='Haml-ish syntax for jinja2 templates',
     long_description=__doc__,
     author='Per Myren',
