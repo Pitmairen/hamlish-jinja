@@ -8,7 +8,7 @@ from jinja2 import  Environment, TemplateSyntaxError
 from jinja2.ext import Extension
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 
 
