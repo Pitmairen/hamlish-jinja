@@ -198,6 +198,31 @@ Inline content
     <div>Tag Content</div>
 
 
+Nested tags
+---------------
+
+This is a shortcut to write multiple nested tags without
+having to create a new line and indent level for each tag.
+
+::
+
+    %head
+        %title -> -block title
+
+    -for i in range(10):
+        %li -> %a href={{ i }}" -> =i
+
+::
+
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+    </head>
+
+    {% for i in range(10): %}
+        <li><a href="{{ i }}">{{ i }}</a></li>
+    {% endfor %}
+
+
 Self closing tags
 -----------------
 

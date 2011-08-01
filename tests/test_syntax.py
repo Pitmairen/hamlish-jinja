@@ -358,8 +358,7 @@ def test(name):
             ;%p << Test
 ''')
         r = '''\
-<html>
-</html>\
+<html></html>\
 '''
         self.assertEqual(s, r)
 
@@ -410,5 +409,116 @@ def test(name):
 </div>\
 '''
         self.assertEqual(s, r)
+
+
+    def test_nested_tags(self):
+        s = self._h('''
+%title -> -block title
+''')
+        r = '''\
+<title>{% block title %}{% endblock %}</title>\
+'''
+        self.assertEqual(s, r)
+
+
+    def test_nested_tags2(self):
+        s = self._h('''
+%title -> -block title << Test
+''')
+        r = '''\
+<title>{% block title %}Test{% endblock %}</title>\
+'''
+        self.assertEqual(s, r)
+
+    def test_nested_tags3(self):
+        s = self._h('''
+%title -> -block title
+    Test
+''')
+        r = '''\
+<title>{% block title %}
+  Test
+{% endblock %}</title>\
+'''
+        self.assertEqual(s, r)
+
+    def test_nested_tags4(self):
+        s = self._h('''
+%title -> -block title -> %span.test
+    Test
+''')
+        r = '''\
+<title>{% block title %}<span class="test">
+  Test
+</span>{% endblock %}</title>\
+'''
+        self.assertEqual(s, r)
+
+    def test_nested_tags5(self):
+        s = self._h('''
+%ul
+    -for i in range(10):
+        %li -> %a href="{{ i }}" -> =i
+''')
+        r = '''\
+<ul>
+  {% for i in range(10): %}
+    <li><a href="{{ i }}">{{ i }}</a></li>
+  {% endfor %}
+</ul>\
+'''
+        self.assertEqual(s, r)
+
+    def test_nested_tags6(self):
+        s = self._h('''
+%ul
+    -for i in range(10):
+        %li -> %a href="{{ i }}" << {{ i }}
+''')
+        r = '''\
+<ul>
+  {% for i in range(10): %}
+    <li><a href="{{ i }}">{{ i }}</a></li>
+  {% endfor %}
+</ul>\
+'''
+        self.assertEqual(s, r)
+
+
+    def test_nested_tags7(self):
+        s = self._h('''
+%pre -> |   test
+''')
+        r = '''\
+<pre>   test</pre>\
+'''
+        self.assertEqual(s, r)
+
+
+
+
+    def test_nested_syntax_error(self):
+
+        self.assertRaises(TemplateSyntaxError,
+                          lambda: self._h('''
+%span -> %br << test
+'''))
+
+
+    def test_nested_syntax_error2(self):
+
+        self.assertRaises(TemplateSyntaxError,
+                          lambda: self._h('''
+%span -> %script. << test
+'''))
+
+
+
+    def test_nested_syntax_error3(self):
+        self.assertRaises(TemplateSyntaxError,
+                          lambda: self._h('''
+%span -> test1 << test2
+'''))
+
 if __name__ == '__main__':
     unittest.main()

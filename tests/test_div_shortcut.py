@@ -171,7 +171,33 @@ class TestSyntax(testing_base.TestCase):
         self.assertEqual(s, r)
 
 
+    def test_nested_with_shortcuts(self):
+        s = self._h('''
+%p -> %span.test
+    Test
+''')
+        r = '''\
+<p><span class="test">
+  Test
+</span></p>'''
+        self.assertEqual(s, r)
 
+    def test_nested_with_shortcuts2(self):
+        s = self._h('''
+%p -> %span.test << Test
+''')
+        r = '''\
+<p><span class="test">Test</span></p>'''
+        self.assertEqual(s, r)
+
+
+    def test_nested_with_shortcuts3(self):
+        s = self._h('''
+%p -> %span.test id="test" -> Test
+''')
+        r = '''\
+<p><span class="test" id="test">Test</span></p>'''
+        self.assertEqual(s, r)
 
 if __name__ == '__main__':
     unittest.main()

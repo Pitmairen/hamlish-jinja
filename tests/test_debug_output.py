@@ -13,7 +13,7 @@ class TestDebugOutput(testing_base.TestCase):
 
     def setUp(self):
         self.hamlish = Hamlish(
-            Output(indent_string='  ', newline_string='\n'), debug=True)
+            Output(indent_string='  ', newline_string='\n', debug=True))
 
 
     def test_html_tags(self):
@@ -174,7 +174,100 @@ def test(name):
 
     def test_self_closing_tag_with_empty_lines_bellow(self):
 
-        self._h('''%br\n\n\n''')
+        s = self._h('''
+%br
+
+
+
+%span << test''')
+
+        r = '''
+<br />
+
+
+
+<span>test</span>
+'''
+        self.assertEqual(s, r)
+
+
+
+
+    def test_nested_tags(self):
+
+        s = self._h('''
+%ul
+    -for i in range(10):
+        %li -> %a href="{{ i }}" << {{ i }}
+
+    %span << test
+''')
+        r = '''
+<ul>
+  {% for i in range(10): %}
+    <li><a href="{{ i }}">{{ i }}</a></li>{% endfor %}
+
+  <span>test</span></ul>
+'''
+        self.assertEqual(s, r)
+
+    def test_nested_tags2(self):
+
+        s = self._h('''
+%ul
+    -for i in range(10):
+        %li -> %a href="{{ i }}" -> {{ i }}
+
+    %span << test
+''')
+        r = '''
+<ul>
+  {% for i in range(10): %}
+    <li><a href="{{ i }}">{{ i }}</a></li>{% endfor %}
+
+  <span>test</span></ul>
+'''
+        self.assertEqual(s, r)
+
+
+    def test_nested_tags3(self):
+
+        s = self._h('''
+%ul
+    -for i in range(10):
+        %li -> %a href="{{ i }}" -> =i
+
+    %span << test
+''')
+        r = '''
+<ul>
+  {% for i in range(10): %}
+    <li><a href="{{ i }}">{{ i }}</a></li>{% endfor %}
+
+  <span>test</span></ul>
+'''
+        self.assertEqual(s, r)
+
+
+    def test_nested_tags4(self):
+
+        s = self._h('''
+%ul
+    -for i in range(10):
+        %li -> %a href="{{ i }}"
+            Test {{ i }}
+
+    %span << test
+''')
+        r = '''
+<ul>
+  {% for i in range(10): %}
+    <li><a href="{{ i }}">
+      Test {{ i }}</a></li>{% endfor %}
+
+  <span>test</span></ul>
+'''
+        self.assertEqual(s, r)
 
 
 if __name__ == '__main__':
