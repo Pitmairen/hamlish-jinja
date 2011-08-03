@@ -666,7 +666,9 @@ class Output(object):
 
                 if isinstance(node, SelfClosingTag):
                     self.write_newline()
-                if isinstance(node, (JinjaTag, HTMLTag, NestedTags)) and not node.has_children():
+                elif isinstance(node, PreformatedText):
+                    self.write('\n')
+                elif isinstance(node, (JinjaTag, HTMLTag, NestedTags)) and not node.has_children():
                     pass
                 else:
                     self.write_newline()
