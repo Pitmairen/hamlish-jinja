@@ -233,6 +233,8 @@ def test(name):
     Test
 %div#test#test2.test#test3.test2
     Test
+%div#test?-123.test!-123
+    Test
 ''')
         r = '''\
 <div id="test" class="test">
@@ -248,6 +250,9 @@ def test(name):
   Test
 </div>
 <div id="test test2 test3" class="test test2">
+  Test
+</div>
+<div id="test?-123" class="test!-123">
   Test
 </div>\
 '''
