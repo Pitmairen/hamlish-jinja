@@ -339,24 +339,36 @@ class Hamlish(object):
         if ' ' in value:
             value, extra_attrs = attrs.split(' ', 1)
 
-        match = re.findall(r'([\.#])(\w+)', value)
+        parts = re.split(r'([\.#])', value)
 
-        if not match:
-            return orig_attrs
+        #The first part should be empty
+        parts = parts[1:]
+
+        #Now parts should be a list like this ['.', 'value', '#', 'value']
+        #So we take every second element starting from the first 
+        #and every second element starting from the second and zip them
+        #together.
+        parts = zip(parts[0::2], parts[1::2])
 
         classes = []
         ids = []
+
+        for type_, value in parts:
+
+            if not value:
+                #ignore empty values
+                continue
+
+            if type_ == self.CLASS_SHORTCUT:
+                classes.append(value)
+            else:
+                ids.append(value)
+
         #We make the class and id the same order as in the template
-        if match[0][0] == self.CLASS_SHORTCUT:
+        if orig_attrs.startswith(self.CLASS_SHORTCUT):
             attrs = (('class', classes), ('id', ids))
         else:
             attrs = (('id', ids), ('class', classes))
-
-        for m in match:
-            if m[0] == self.CLASS_SHORTCUT:
-                classes.append(m[1])
-            else:
-                ids.append(m[1])
 
         rv = ' '.join('%s="%s"' % (k, ' '.join(v))
                 for k, v in attrs if v)
