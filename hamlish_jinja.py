@@ -321,7 +321,8 @@ class Hamlish(object):
         elif tag in self._self_closing_html_tags:
             self_closing = True
 
-        if self.ID_SHORTCUT in attrs or self.CLASS_SHORTCUT in attrs:
+        if attrs.startswith(self.ID_SHORTCUT) or \
+            attrs.startswith(self.CLASS_SHORTCUT):
 
             attrs = self._parse_shortcut_attributes(attrs)
 
