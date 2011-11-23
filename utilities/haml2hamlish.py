@@ -9,9 +9,11 @@ A limited amount of testing shows that (despite its shortcomings) this utility c
 
 Known shortcomings:
 
-    * html2haml appears to mangle HTML5 doctypes - so these need to be manually fixed up at the top of the output
+    * This understands html2haml output - human created haml is probably too advanced to be translated reliably
     
     * Since html2haml doesn't understand embedded Ruby, this utility doesn't attempt to either
+    
+    * html2haml appears to mangle HTML5 doctypes - so these need to be manually fixed up at the top of the output
     
     * The special case of IE-version specific comments causes this to create a 'FIXME'
     
