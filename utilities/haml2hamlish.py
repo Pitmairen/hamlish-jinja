@@ -2,6 +2,27 @@
 import re
 import sys
 
+"""
+This utility has a very limited scope : It parses the output of regular the 'Ruby' html2haml utility into the hamlish-jinja dialect.
+
+A limited amount of testing shows that (despite its shortcomings) this utility can greatly increase the speed of implementing bought themes in Flask, for instance.
+
+Known shortcomings:
+
+    * html2haml appears to mangle HTML5 doctypes - so these need to be manually fixed up at the top of the output
+    
+    * Since html2haml doesn't understand embedded Ruby, this utility doesn't attempt to either
+    
+    * The special case of IE-version specific comments causes this to create a 'FIXME'
+    
+    * If something can't be parsed, then a 'FIXME' gets into the output
+    
+Typical Usage:: 
+
+html2haml index.html | python haml2hamlish.py > index-in-hamlish-dialect.haml
+
+"""
+
 for line in sys.stdin:
     command = re.match( r'^(\s*)(.+?)(/?)$', line)
     
@@ -51,7 +72,7 @@ for line in sys.stdin:
             if len(remainder)>0 and remainder[0]=='}':
                 remainder=remainder[1:] # Safe to forget first character
             else:
-                print "THIS IS UNPARSED :: " + remainder
+                print "THIS IS UNPARSED - FIXME :: " + remainder
             
         else:
             # This this is a simple token, rest of line is just content
