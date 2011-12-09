@@ -9,6 +9,12 @@ from jinja2.ext import Extension
 __version__ = '0.1.1'
 
 
+begin_tag_rx = r'\{%\-?\s*haml.*?%\}'
+end_tag_rx = r'\{%\-?\s*endhaml\s*\-?%\}'
+
+begin_tag_m = re.compile(begin_tag_rx)
+end_tag_m = re.compile(end_tag_rx)
+
 
 class HamlishExtension(Extension):
 
@@ -53,11 +59,60 @@ class HamlishExtension(Extension):
         return Hamlish(output, self.environment.hamlish_enable_div_shortcut)
 
 
+class HamlishTagExtension(HamlishExtension):
+    
+	tags = set(['haml'])
+
+	
+	def _get_lineno(self, source):
+		matches = re.finditer(r"\n", source)
+		if matches:
+			return len(tuple(matches))
+		return 0
+
+	def parse(self, parser):
+		
+		haml_data = parser.parse_statements(['name:endhaml']) 
+		parser.stream.expect('name:endhaml')
+		
+		return [
+			nodes.Output([haml_data])
+		]
+
+	def preprocess(self, source, name, filename = None):
+		ret_source = ''
+		start_pos = 0
+		
+		while True:
+			tag_match = begin_tag_m.search(source, start_pos)
+			
+			if tag_match:
+				
+				end_tag = end_tag_m.search(source, tag_match.end())
+				
+				if not end_tag:
+					raise TemplateSyntaxError('Expecting "endhaml" tag', self._get_lineno(source[:start_pos]))
+				
+				haml_source = source[tag_match.end() : end_tag.start()]
+				
+				h = self.get_preprocessor(self.environment.hamlish_mode)
+				try:
+					ret_source += source[start_pos : tag_match.start()] + h.convert_source(haml_source)
+				except TemplateIndentationError, e:
+					raise TemplateSyntaxError(e.message, e.lineno, name = name, filename = filename)
+				except TemplateSyntaxError, e:
+					raise TemplateSyntaxError(e.message, e.lineno, name = name, filename = filename)
+				
+				start_pos = end_tag.end()
+			else:
+				ret_source += source[start_pos:]
+				break
+		
+		return ret_source
+
 
 class TemplateIndentationError(TemplateSyntaxError):
     pass
-
-
 
 
 class Hamlish(object):
