@@ -605,10 +605,6 @@ class JinjaVariable(TextNode):
     pass
 
 
-class ExtendedJinjaTag(Node):
-    pass
-
-
 class ExtendingJinjaTag(JinjaTag, SelfClosingTag):
     pass
 
