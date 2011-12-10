@@ -8,9 +8,9 @@ import testing_base
 
 
 jinja_env = jinja2.Environment(
-	extensions = [
-		HamlishTagExtension,
-	]
+    extensions = [
+        HamlishTagExtension,
+    ]
 )
 
 class TestHamlTags(testing_base.TestCase):
@@ -18,8 +18,8 @@ class TestHamlTags(testing_base.TestCase):
     def setUp(self):
         self.hamlish = Hamlish(
             Output(indent_string='', newline_string='', debug=False))
-    
-    
+
+
     def test_basic(self):
         s = jinja_env.from_string(
 '''{% haml %}
