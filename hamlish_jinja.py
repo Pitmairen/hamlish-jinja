@@ -767,15 +767,4 @@ class Output(object):
 
 
 
-if __name__ == '__main__':
-
-    haml = Hamlish(Output(debug=True))
-
-
-    #print dir(open('test.haml'))
-    source = open('test.haml').read()
-
-    nodes = haml.convert_source(source)
-
-    print nodes
 
