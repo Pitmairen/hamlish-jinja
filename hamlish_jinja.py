@@ -32,7 +32,7 @@ class HamlishExtension(Extension):
 
 
     def preprocess(self, source, name, filename=None):
-        if not os.path.splitext(name)[1] in \
+        if name is None or os.path.splitext(name)[1] not in \
             self.environment.hamlish_file_extensions:
             return source
 
