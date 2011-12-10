@@ -418,3 +418,58 @@ Example Template
             </p>
         {% endcall %}
     {% endblock %}
+
+
+Hamlish Tag Extension
+=====================
+
+This extension add a {% haml %}{% endhaml %} to jinja so you can embed
+haml inside you html templates.
+
+
+Usage
+-----
+
+To use this extension just add it to the jinja environment.
+
+::
+
+    from jinja2 import Environment
+    from hamlish_jinja import HamlishTagExtension
+
+    env = Environment(extensions=[HamlishTagExtension])
+
+
+This extension uses the same configuration options as the HamlishExtension,
+except that the env.hamlish_file_extensions option is not used.
+
+
+Example
+-------
+
+::
+
+    <html>
+        <head><title>Example</title></head>
+        <body>
+        {% haml %}
+
+        %form action="{{ action }}" method="post"
+           -if form.has_errors():
+              %ul.errors
+                 -for err in form.errors:
+                    %li -> =err
+
+           %ul
+              -for field in form:
+                 %li -> =field
+
+           %div.buttons
+              %input type="submit" name="submit"
+              %input type="submit" name="preview"
+
+        {% endhaml %}
+        </body>
+    </html>
+
+
