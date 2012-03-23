@@ -28,6 +28,7 @@ class HamlishExtension(Extension):
             hamlish_newline_string='\n',
             hamlish_debug=False,
             hamlish_enable_div_shortcut=False,
+            hamlish_from_string=self._from_string
         )
 
 
@@ -59,6 +60,18 @@ class HamlishExtension(Extension):
         return Hamlish(output, self.environment.hamlish_enable_div_shortcut)
 
 
+    def _from_string(self, source, globals=None, template_class=None):
+        env = self.environment
+        globals = env.make_globals(globals)
+        cls = template_class or env.template_class
+        template_name = 'hamlish_from_string'
+        if env.hamlish_file_extensions:
+            template_name += env.hamlish_file_extensions[0]
+        else:
+            template_name += '.haml'
+        return cls.from_code(env, env.compile(source, template_name), globals, None)
+
+
 class HamlishTagExtension(HamlishExtension):
 
     tags = set(['haml'])
@@ -72,7 +85,7 @@ class HamlishTagExtension(HamlishExtension):
 
     def parse(self, parser):
 
-        haml_data = parser.parse_statements(['name:endhaml']) 
+        haml_data = parser.parse_statements(['name:endhaml'])
         parser.stream.expect('name:endhaml')
 
         return [
@@ -400,7 +413,7 @@ class Hamlish(object):
         parts = parts[1:]
 
         #Now parts should be a list like this ['.', 'value', '#', 'value']
-        #So we take every second element starting from the first 
+        #So we take every second element starting from the first
         #and every second element starting from the second and zip them
         #together.
         parts = zip(parts[0::2], parts[1::2])

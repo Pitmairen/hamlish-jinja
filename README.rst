@@ -94,6 +94,23 @@ Example::
     env.hamlish_enable_div_shortcut=True
 
 
+Environment
+-----------
+
+The environment gets extended with a new method **hamlish_from_string**
+which works the same as the standard **env.from_string** method, but renders
+the template with the hamlish preprocessor.
+
+::
+
+    tpl = '''
+    %div
+        %p
+            test
+    '''
+    env.hamlish_from_string(tpl).render()
+
+
 Syntax
 ======
 
@@ -156,7 +173,7 @@ There is also a shortcut for creating classes and ids.
         Tag Content
     </div>
 
-Multiple classes and ids can be chained together in 
+Multiple classes and ids can be chained together in
 any order.
 
 ::
