@@ -76,7 +76,8 @@ Example::
 hamlish_file_extensions:
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-A list of file extensions to run the preprocessor on.
+A list of file extensions to run the preprocessor on. The default
+is ('.haml',)
 
 Example::
     env.hamlish_file_extensions=('.haml',)
