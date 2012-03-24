@@ -85,6 +85,7 @@ Example::
 
 hamlish_enable_div_shortcut:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*Added in version 0.2.0*
 
 This enables the div shortcut so you can create div tags with a id or class
 by using only the id (#myid) or class (.myclass) at the beginning of a line.
@@ -97,6 +98,7 @@ Example::
 
 Environment
 -----------
+*Added in version 0.2.0*
 
 The environment gets extended with a new method **hamlish_from_string**
 which works the same as the standard **env.from_string** method, but renders
@@ -162,6 +164,7 @@ Attributes are just like normal html attributes.
 
 
 There is also a shortcut for creating classes and ids.
+*Added in version 0.2.0*
 
 ::
 
@@ -189,8 +192,8 @@ any order.
     </div>
 
 
-If these shortcuts are used at the beginning of a line
-a div is automatically created.
+If these shortcuts are used at the beginning of a line and
+*env.hamlish_enable_div_shortcut* is enabled a div is automatically created.
 
 ::
 
@@ -218,6 +221,7 @@ Inline content
 
 Nested tags
 ---------------
+*Added in version 0.2.0*
 
 This is a shortcut to write multiple nested tags without
 having to create a new line and indent level for each tag.
@@ -375,6 +379,7 @@ Preformatted lines
 
 Line comments
 -------------
+*Added in version 0.2.0*
 
 Single lines can be commented by starting the line with a ";".
 The lines will not be in the output.
@@ -440,6 +445,7 @@ Example Template
 
 Hamlish Tag Extension
 =====================
+*Added in version 0.2.0*
 
 This extension add a {% haml %}{% endhaml %} to jinja so you can embed
 haml inside you html templates.
