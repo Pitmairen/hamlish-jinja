@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+# Copyright: (c) 2012 by Per Myren.
+# License: BSD, see LICENSE for more details.
+#
 
 import re
 import os.path

@@ -1,0 +1,15 @@
+Hamlish-Jinja Changelog
+========================
+
+
+Version 0.3.0
+--------------
+
+- Changed license from GPL to BSD (utilities/haml2hamlish.py is still GPL)
+
+
+Version 0.2.0
+-------------
+
+- No changes available
+
