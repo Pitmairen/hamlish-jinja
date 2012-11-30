@@ -10,7 +10,7 @@ import os.path
 from jinja2 import  Environment, TemplateSyntaxError
 from jinja2.ext import Extension
 
-__version__ = '0.3.0'
+__version__ = '0.3.1-dev'
 
 
 begin_tag_rx = r'\{%\-?\s*haml.*?%\}'
