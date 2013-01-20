@@ -7,7 +7,7 @@
 import re
 import os.path
 
-from jinja2 import  Environment, TemplateSyntaxError
+from jinja2 import TemplateSyntaxError, nodes
 from jinja2.ext import Extension
 
 __version__ = '0.3.1-dev'
