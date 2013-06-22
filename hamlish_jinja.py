@@ -44,9 +44,9 @@ class HamlishExtension(Extension):
         h = self.get_preprocessor(self.environment.hamlish_mode)
         try:
             return h.convert_source(source)
-        except TemplateIndentationError, e:
+        except TemplateIndentationError as e:
             raise TemplateSyntaxError(e.message, e.lineno, name=name, filename=filename)
-        except TemplateSyntaxError, e:
+        except TemplateSyntaxError as e:
             raise TemplateSyntaxError(e.message, e.lineno, name=name, filename=filename)
 
 
@@ -115,9 +115,9 @@ class HamlishTagExtension(HamlishExtension):
                 h = self.get_preprocessor(self.environment.hamlish_mode)
                 try:
                     ret_source += source[start_pos : tag_match.start()] + h.convert_source(haml_source)
-                except TemplateIndentationError, e:
+                except TemplateIndentationError as e:
                     raise TemplateSyntaxError(e.message, e.lineno, name = name, filename = filename)
-                except TemplateSyntaxError, e:
+                except TemplateSyntaxError as e:
                     raise TemplateSyntaxError(e.message, e.lineno, name = name, filename = filename)
 
                 start_pos = end_tag.end()
@@ -362,7 +362,7 @@ class Hamlish(object):
         nodes = []
         node_lines = [] #Used to make a nicer error message
 
-        for line in map(lambda x: x.strip(), tags):
+        for line in [x.strip() for x in tags]:
 
             node = self._parse_node(lineno, line)
 
@@ -420,7 +420,7 @@ class Hamlish(object):
         #So we take every second element starting from the first
         #and every second element starting from the second and zip them
         #together.
-        parts = zip(parts[0::2], parts[1::2])
+        parts = list(zip(parts[0::2], parts[1::2]))
 
         classes = []
         ids = []
@@ -536,7 +536,7 @@ class Node(object):
 
     def has_children(self):
         "returns False if children is empty or contains only empty lines else True."
-        return bool(filter(lambda x: not isinstance(x, EmptyLine), self.children))
+        return bool([x for x in self.children if not isinstance(x, EmptyLine)])
 
 
     def add(self, child):
