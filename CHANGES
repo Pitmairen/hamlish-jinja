@@ -1,6 +1,14 @@
 Hamlish-Jinja Changelog
 ========================
 
+Version 0.3.2
+--------------
+
+- Use the block_start_string, block_end_string, variable_start_string and
+  variable_end_string from the jinja environment
+  when generating the output. (Thanks to https://github.com/Yajo)
+
+
 Version 0.3.1
 --------------
 
