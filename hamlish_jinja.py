@@ -52,14 +52,29 @@ class HamlishExtension(Extension):
 
     def get_preprocessor(self, mode):
 
+        placeholders = {
+            'block_start_string': self.environment.block_start_string,
+            'block_end_string': self.environment.block_end_string,
+            'variable_start_string': self.environment.variable_start_string,
+            'variable_end_string': self.environment.variable_end_string}
+
         if mode == 'compact':
-            output = Output(indent_string='', newline_string='')
+            output = Output(
+                indent_string='',
+                newline_string='',
+                **placeholders)
         elif mode == 'debug':
-            output = Output(indent_string='   ', newline_string='\n', debug=True)
+            output = Output(
+                indent_string='   ',
+                newline_string='\n',
+                debug=True,
+                **placeholders)
         else:
-            output = Output(indent_string=self.environment.hamlish_indent_string,
-                        newline_string=self.environment.hamlish_newline_string,
-                        debug=self.environment.hamlish_debug)
+            output = Output(
+                indent_string=self.environment.hamlish_indent_string,
+                newline_string=self.environment.hamlish_newline_string,
+                debug=self.environment.hamlish_debug,
+                **placeholders)
 
         return Hamlish(output, self.environment.hamlish_enable_div_shortcut)
 
@@ -630,11 +645,23 @@ class ExtendingJinjaTag(JinjaTag, SelfClosingTag):
 class Output(object):
 
 
-    def __init__(self, indent_string='    ', newline_string='\n', debug=False):
+    def __init__(self,
+                 indent_string='    ',
+                 newline_string='\n',
+                 debug=False,
+                 block_start_string='{%',
+                 block_end_string='%}',
+                 variable_start_string='{{',
+                 variable_end_string='}}'):
         self._indent = indent_string
         self._newline = newline_string
         self.debug = debug
         self.buffer = []
+
+        self.block_start_string = block_start_string
+        self.block_end_string = block_end_string
+        self.variable_start_string = variable_start_string
+        self.variable_end_string = variable_end_string
 
     def reset(self):
         self.buffer = []
@@ -660,13 +687,23 @@ class Output(object):
         self.write('</%s>' % node.tag_name)
 
     def write_open_jinja(self, node):
-        self.write('{%% %s%s %%}' % (node.tag_name, node.attrs))
+        self.write('%s %s%s %s' % (
+            self.block_start_string,
+            node.tag_name,
+            node.attrs,
+            self.block_end_string))
 
     def write_close_jinja(self, node):
-        self.write('{%% end%s %%}' % node.tag_name)
+        self.write('%s end%s %s' % (
+            self.block_start_string,
+            node.tag_name,
+            self.block_end_string))
 
     def write_jinja_variable(self, node):
-        self.write('{{ %s }}' % node.data)
+        self.write('%s %s %s' % (
+            self.variable_start_string,
+            node.data,
+            self.variable_end_string))
 
     def write_newline(self):
         self.write(self._newline)
@@ -781,7 +818,3 @@ class Output(object):
             if self.debug:
                 #readd the whitespace after the end tag
                 self.write(''.join(prev))
-
-
-
-
