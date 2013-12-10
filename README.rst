@@ -36,7 +36,7 @@ Basic Usage
 To use this extension you just need to add it to you jinja
 environment and use ".haml" as extension for your templates.
 
-::
+.. code-block:: python
 
     from jinja2 import Environment
     from hamlish_jinja import HamlishExtension
@@ -68,7 +68,10 @@ debug:
     should display the correct line and source hint.
 
 
-Example::
+Example:
+
+.. code-block:: python
+
     env.hamlish_mode='debug'
 
 
@@ -79,7 +82,10 @@ hamlish_file_extensions:
 A list of file extensions to run the preprocessor on. The default
 is ('.haml',)
 
-Example::
+Example:
+
+.. code-block:: python
+
     env.hamlish_file_extensions=('.haml',)
 
 
@@ -92,7 +98,10 @@ by using only the id (#myid) or class (.myclass) at the beginning of a line.
 
 This is disabled by default.
 
-Example::
+Example:
+
+.. code-block:: python
+
     env.hamlish_enable_div_shortcut=True
 
 
@@ -104,7 +113,7 @@ The environment gets extended with a new method **hamlish_from_string**
 which works the same as the standard **env.from_string** method, but renders
 the template with the hamlish preprocessor.
 
-::
+.. code-block:: haml
 
     tpl = '''
     %div
@@ -128,14 +137,14 @@ know what you are doing, but it's not recommended.
 Html tags
 ---------
 
-::
+.. code-block:: haml
 
     %html
         %body
             %div
                 Tag Content
 
-::
+.. code-block:: html
 
     <html>
         <body>
@@ -151,12 +160,12 @@ Html attributes
 
 Attributes are just like normal html attributes.
 
-::
+.. code-block:: haml
 
     %div id="myid" class="myclass"
         Tag Content
 
-::
+.. code-block:: html
 
     <div id="myid" class="myclass">
         Tag Content
@@ -166,12 +175,12 @@ Attributes are just like normal html attributes.
 There is also a shortcut for creating classes and ids.
 *Added in version 0.2.0*
 
-::
+.. code-block:: haml
 
     %div#myid.myclass
         Tag Content
 
-::
+.. code-block:: html
 
     <div id="myid" class="myclass">
         Tag Content
@@ -180,12 +189,12 @@ There is also a shortcut for creating classes and ids.
 Multiple classes and ids can be chained together in
 any order.
 
-::
+.. code-block:: haml
 
     %div#myid.myclass.myclass2
         Tag Content
 
-::
+.. code-block:: html
 
     <div id="myid" class="myclass myclass2">
         Tag Content
@@ -195,12 +204,12 @@ any order.
 If these shortcuts are used at the beginning of a line and
 *env.hamlish_enable_div_shortcut* is enabled a div is automatically created.
 
-::
+.. code-block:: haml
 
     #myid.myclass
         Tag Content
 
-::
+.. code-block:: html
 
     <div id="myid" class="myclass">
         Tag Content
@@ -210,11 +219,11 @@ If these shortcuts are used at the beginning of a line and
 Inline content
 ---------------
 
-::
+.. code-block:: haml
 
     %div << Tag Content
 
-::
+.. code-block:: html
 
     <div>Tag Content</div>
 
@@ -226,7 +235,7 @@ Nested tags
 This is a shortcut to write multiple nested tags without
 having to create a new line and indent level for each tag.
 
-::
+.. code-block:: haml
 
     %head
         %title -> -block title
@@ -234,7 +243,7 @@ having to create a new line and indent level for each tag.
     -for i in range(10):
         %li -> %a href={{ i }}" -> =i
 
-::
+.. code-block:: html
 
     <head>
         <title>{% block title %}{% endblock %}</title>
@@ -253,12 +262,12 @@ Tags can be closed by ending the line with a "."
 Some tags ar automatically closed:
 br, img, link, hr, meta, input
 
-::
+.. code-block:: haml
 
     %br
     %div.
 
-::
+.. code-block:: html
 
     <br />
     <div />
@@ -271,14 +280,14 @@ Continued lines
 Long lines can be split over many lines by ending the line with "\\"
 The indent of the line after the "\\" will be ignored.
 
-::
+.. code-block:: haml
 
     %div style="background: red;\
             color: blue; \
             text-decoration: underline;"
         Tag Content
 
-::
+.. code-block:: html
 
     <div style="background: red;color: blue; text-decoration: underline;">
         Tag Content
@@ -292,11 +301,11 @@ Escaped lines
 Lines that start with one of the special characters can
 be escaped with "\\"
 
-::
+.. code-block:: haml
 
     \%div
 
-::
+.. code-block:: haml
 
     %div
 
@@ -307,7 +316,7 @@ Jinja tags
 
 Jinja tags starts with "-"
 
-::
+.. code-block:: haml
 
     -extends "layout.haml"
 
@@ -317,7 +326,7 @@ Jinja tags starts with "-"
         -else:
             %li << No users
 
-::
+.. code-block:: html
 
     {% extends "layout.haml" %}
 
@@ -337,7 +346,7 @@ Variables can be output directly in content by using the normal
 {{ }} syntax.
 or "=" can be used to output a variable on beginning of lines.
 
-::
+.. code-block:: haml
 
     -macro input(type, value):
         %input type="{{ type }}" value="{{ value }}".
@@ -346,7 +355,7 @@ or "=" can be used to output a variable on beginning of lines.
         %p
             =input(type="text", value="Test")
 
-::
+.. code-block:: html
 
     {% macro input(type, value): %}
         <input type="{{ type }}" value="{{ value }}" />
@@ -363,13 +372,13 @@ or "=" can be used to output a variable on beginning of lines.
 Preformatted lines
 ------------------
 
-::
+.. code-block:: haml
 
     %pre
         |def test(name):
         |    print name
 
-::
+.. code-block:: html
 
     <pre>
     def test(name):
@@ -384,7 +393,7 @@ Line comments
 Single lines can be commented by starting the line with a ";".
 The lines will not be in the output.
 
-::
+.. code-block:: haml
 
     ;Test comment
     ;Test commnet
@@ -392,7 +401,7 @@ The lines will not be in the output.
         ;%div
             Tag Content
 
-::
+.. code-block:: html
 
     <div>
         Tag Content
@@ -402,7 +411,7 @@ The lines will not be in the output.
 Example Template
 ================
 
-::
+.. code-block:: haml
 
     ;This is a test template
     ;to show the syntax
@@ -421,7 +430,7 @@ Example Template
                 %input type="submit" value="Login"
 
 
-::
+.. code-block:: html
 
     {% extends "base.haml" %}
     {% import "lib/forms.haml" as forms %}
@@ -456,7 +465,7 @@ Usage
 
 To use this extension just add it to the jinja environment.
 
-::
+.. code-block:: python
 
     from jinja2 import Environment
     from hamlish_jinja import HamlishTagExtension
@@ -471,7 +480,7 @@ except that the env.hamlish_file_extensions option is not used.
 Example
 -------
 
-::
+.. code-block:: html
 
     <html>
         <head><title>Example</title></head>
