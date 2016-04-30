@@ -171,6 +171,47 @@ class TestSyntax(testing_base.TestCase):
         self.assertEqual(s, r)
 
 
+    def test_shortcut_parenthetic_normal(self):
+        s = self._h('.test(foo="bar")\n  Test')
+        r = '<div class="test" foo="bar">\n  Test\n</div>'
+        self.assertEqual(s, r)
+
+    def test_shortcut_parenthetic_inline(self):
+        s = self._h('.test(foo="bar") << Test')
+        r = '<div class="test" foo="bar">Test</div>'
+        self.assertEqual(s, r)
+
+    def test_shortcut_parenthetic_normal2(self):
+        s = self._h('.test.test-1(foo="bar")\n  Test')
+        r = '<div class="test test-1" foo="bar">\n  Test\n</div>'
+        self.assertEqual(s, r)
+
+    def test_shortcut_parenthetic_inline2(self):
+        s = self._h('.test.test-1(foo="bar") << Test')
+        r = '<div class="test test-1" foo="bar">Test</div>'
+        self.assertEqual(s, r)
+
+    def test_shortcut_parenthetic_inline3(self):
+        s = self._h('#foo.test.test-1(foo="bar") << Test')
+        r = '<div id="foo" class="test test-1" foo="bar">Test</div>'
+        self.assertEqual(s, r)
+
+    def test_shortcut_parenthetic_self_closing(self):
+        s = self._h('.test(foo="bar").')
+        r = '<div class="test" foo="bar" />'
+        self.assertEqual(s, r)
+
+    def test_shortcut_parenthetic_self_closing2(self):
+        s = self._h('.test.test-1(foo="bar").')
+        r = '<div class="test test-1" foo="bar" />'
+        self.assertEqual(s, r)
+
+    def test_shortcut_parenthetic_self_closing3(self):
+        s = self._h('#foo.test.test-1(foo="bar").')
+        r = '<div id="foo" class="test test-1" foo="bar" />'
+        self.assertEqual(s, r)
+
+
     def test_nested_with_shortcuts(self):
         s = self._h('''
 %p -> %span.test
@@ -201,4 +242,3 @@ class TestSyntax(testing_base.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-

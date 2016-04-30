@@ -323,6 +323,50 @@ def test(name):
         self.assertEqual(s, r)
 
 
+    def test_parenthetic_normal(self):
+        s = self._h('%span(foo="bar")\n  Test')
+        r = '<span foo="bar">\n  Test\n</span>'
+        self.assertEqual(s, r)
+
+    def test_parenthetic_inline(self):
+        s = self._h('%span(foo="bar") << Test')
+        r = '<span foo="bar">Test</span>'
+        self.assertEqual(s, r)
+
+    def test_mixed_parenthetic_normal(self):
+        s = self._h('%span.test-1(foo="bar")\n  Test')
+        r = '<span class="test-1" foo="bar">\n  Test\n</span>'
+        self.assertEqual(s, r)
+
+    def test_mixed_parenthetic_inline(self):
+        s = self._h('%span.test-1(foo="bar") << Test')
+        r = '<span class="test-1" foo="bar">Test</span>'
+        self.assertEqual(s, r)
+
+    def test_mixed_parenthetic_normal2(self):
+        s = self._h('%span#foo.test-1(foo="bar")\n  Test')
+        r = '<span id="foo" class="test-1" foo="bar">\n  Test\n</span>'
+        self.assertEqual(s, r)
+
+    def test_mixed_parenthetic_inline2(self):
+        s = self._h('%span#foo.test-1(foo="bar") << Test')
+        r = '<span id="foo" class="test-1" foo="bar">Test</span>'
+        self.assertEqual(s, r)
+
+    def test_parenthetic_self_closing(self):
+        s = self._h('%span(foo="bar").')
+        r = '<span foo="bar" />'
+        self.assertEqual(s, r)
+
+    def test_mixed_parenthetic_self_closing(self):
+        s = self._h('%span.test-1(foo="bar").')
+        r = '<span class="test-1" foo="bar" />'
+        self.assertEqual(s, r)
+
+    def test_mixed_parenthetic_self_closing2(self):
+        s = self._h('%span#foo.test-1(foo="bar").')
+        r = '<span id="foo" class="test-1" foo="bar" />'
+        self.assertEqual(s, r)
 
 
     def test_line_comment(self):
@@ -524,6 +568,7 @@ def test(name):
                           lambda: self._h('''
 %span -> test1 << test2
 '''))
+
 
 if __name__ == '__main__':
     unittest.main()

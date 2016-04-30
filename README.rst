@@ -215,6 +215,21 @@ Shortcuts can be used with extended attributes.
     </div>
 
 
+Extended attributes can be enclosed in parentheses as described in the Haml
+reference.
+
+.. code-block:: haml
+
+    %div.myclass(myattr="myval")
+        Tag Content
+
+.. code-block:: html
+
+    <div class="myclass" myattr="myval">
+        Tag content
+    </div>
+
+
 If these shortcuts are used at the beginning of a line and
 *env.hamlish_enable_div_shortcut* is enabled a div is automatically created.
 
