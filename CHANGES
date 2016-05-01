@@ -1,6 +1,12 @@
 Hamlish-Jinja Changelog
 ========================
 
+Version 0.3.3
+--------------
+
+- Allow parenthesis around HTML attributes. (Thanks to https://github.com/rbour)
+
+
 Version 0.3.2
 --------------
 
