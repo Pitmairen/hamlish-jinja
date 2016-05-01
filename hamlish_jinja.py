@@ -413,6 +413,8 @@ class Hamlish(object):
 
             attrs = self._parse_shortcut_attributes(attrs)
 
+        elif attrs and attrs[0] == '(' and attrs[-1] == ')':
+            attrs = ' ' + attrs[1:-1]
 
         if self_closing:
             return SelfClosingHTMLTag(tag, attrs)
@@ -423,7 +425,12 @@ class Hamlish(object):
         orig_attrs = attrs
         value = attrs
         extra_attrs = ''
-        if ' ' in value:
+
+        # Extract extra attrs from parentheses, otherwise, split on first space
+        m = re.match(r'^([\.#0-9A-Za-z\-]+)\((.+?)\)$', value)
+        if m:
+            value, extra_attrs = m.group(1), m.group(2)
+        elif ' ' in value:
             value, extra_attrs = attrs.split(' ', 1)
 
         parts = re.split(r'([\.#])', value)
