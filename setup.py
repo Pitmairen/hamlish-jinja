@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This extension to jinja make it possible to use a
-`haml <http://haml-lang.com/>`_-ish syntax for your jinja2 templates.
+`haml <http://haml.info/>`_-ish syntax for your jinja2 templates.
 
 Example template::
 
