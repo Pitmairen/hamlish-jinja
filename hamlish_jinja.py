@@ -32,7 +32,8 @@ class HamlishExtension(Extension):
             hamlish_newline_string='\n',
             hamlish_debug=False,
             hamlish_enable_div_shortcut=False,
-            hamlish_from_string=self._from_string
+            hamlish_from_string=self._from_string,
+            hamlish_filters=None,
         )
 
 
@@ -76,7 +77,8 @@ class HamlishExtension(Extension):
                 debug=self.environment.hamlish_debug,
                 **placeholders)
 
-        return Hamlish(output, self.environment.hamlish_enable_div_shortcut)
+        return Hamlish(output, self.environment.hamlish_enable_div_shortcut,
+                       self.environment.hamlish_filters)
 
 
     def _from_string(self, source, globals=None, template_class=None):
@@ -162,6 +164,7 @@ class Hamlish(object):
     CLASS_SHORTCUT = '.'
     LINE_COMMENT = ';'
     NESTED_TAGS_SEP = ' -> '
+    FILTER_START = ':'
 
 
 
@@ -193,9 +196,10 @@ class Hamlish(object):
     }
 
 
-    def __init__(self, output, use_div_shortcut=False):
+    def __init__(self, output, use_div_shortcut=False, filters=None):
         self.output = output
         self._use_div_shortcut = use_div_shortcut
+        self._filters = filters or {}
 
     def convert_source(self, source):
 
@@ -274,7 +278,11 @@ class Hamlish(object):
         # Lines that end with CONTINUED_LINE are merged with the next line
         continued_line = []
 
-        for line in source.rstrip().split('\n'):
+
+        source_lines = self._extract_filter_blocks(source)
+
+
+        for line in source_lines:
 
             line = line.rstrip()
 
@@ -308,6 +316,63 @@ class Hamlish(object):
                 lines.append(line)
 
         return lines
+
+
+    def _extract_filter_blocks(self, source):
+
+        lines = []
+
+        filter_block = None
+        filter_start_indent = None #The indent level of the filter start tag
+        filter_block_indent = None #The indent level of the first content in the block
+
+        for line in source.rstrip().split('\n'):
+
+            stripped_line = line.lstrip()
+
+            if filter_block is not None:
+
+                if not stripped_line:
+                    filter_block.append(stripped_line) #empty line
+                    continue
+
+                # Find the block indent level if this is the first non
+                # whitespace line after the start of the block
+                if filter_block_indent is None:
+                    filter_block_indent = line[:len(line) - len(stripped_line)]
+
+
+                # We are inside the block as long as the lines are at least
+                # indented with the filter_block_indent level.
+                # If an empty filter block is defined, filter_block_indent may
+                # not be correct, because the first non-whitespace line which
+                # is used to get the indent level may already be outside the
+                # block. So if the line starts with both filter_start_indent
+                # and the filter_block_indent and they are not equal we should
+                # be inside the block.
+                if line.startswith(filter_block_indent) and line.startswith(filter_start_indent) and filter_block_indent != filter_start_indent:
+                    filter_block.append(line[len(filter_block_indent):])
+                    continue
+                else:
+                    lines.append('\n'.join(filter_block))
+                    filter_block = None
+                    filter_block_indent = None
+
+            if not stripped_line: # Whit space only
+                lines.append(line) # We just leave the whitespace as it is and let it be handled elsewhere
+
+            elif stripped_line.startswith(self.FILTER_START) and self._filter_is_defined(stripped_line):
+                # A known filter was found so we start a to collect the filter block
+                filter_block = [line.rstrip()]
+                filter_start_indent = line[:len(line) - len(stripped_line)]
+            else:
+                lines.append(line)
+
+        if filter_block is not None:
+            lines.append('\n'.join(filter_block))
+
+        return lines
+
 
 
     def _parse_line(self, lineno, line):
@@ -344,10 +409,31 @@ class Hamlish(object):
             return PreformatedText(line[1:])
         elif line.startswith(self.JINJA_VARIABLE):
             return JinjaVariable(line[1:])
+        elif line.startswith(self.FILTER_START) and self._filter_is_defined(line.split('\n')[0]):
+            return self._create_filter_node(lineno, line)
         elif line.startswith(self.ESCAPE_LINE):
             return TextNode(line[1:])
 
         return TextNode(line)
+
+
+    def _filter_is_defined(self, line):
+        if line[1:].strip() in self._filters:
+            return True
+        return False
+
+    # The filter block data should be a single line string
+    # that contains both the start tag definion and the content
+    # of the block.
+    # ie. :testfilter\nblock content\nblock content\n
+    def _create_filter_node(self, lineno, filter_block_data):
+        data = filter_block_data.split('\n')
+        name = data[0].strip()[1:]
+        content = '\n'.join(data[1:])
+        if not content.strip():
+            raise TemplateSyntaxError('Empty filter block (%s)' % name, lineno)
+
+        return FilterNode(self._filters[name], content)
 
 
     def _has_inline_data(self, line):
@@ -602,6 +688,20 @@ class TextNode(Node):
         super(TextNode, self).__init__()
 
 
+class FilterNode(TextNode):
+    def __init__(self, filter, data):
+        self.filter = filter
+        self._data = data
+        super(TextNode, self).__init__()
+
+    def has_children(self):
+        return False;
+
+    @property
+    def data(self):
+        return self.filter(self._data)
+
+
 class InlineData(Node):
 
     def __init__(self, node, data):
@@ -785,7 +885,7 @@ class Output(object):
 
             else:
 
-                if not isinstance(node, PreformatedText):
+                if not isinstance(node, (PreformatedText, FilterNode)):
                     self.write_indent(depth)
                 self.write_open_node(node)
 

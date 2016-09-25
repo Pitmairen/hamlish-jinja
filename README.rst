@@ -105,6 +105,24 @@ Example:
     env.hamlish_enable_div_shortcut=True
 
 
+
+hamlish_filters:
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+A dictionary that maps filter names to callables that will be called when the matching
+filter is used in the template. See the description of how to use filters in the templates
+in the synax section below.
+
+Example:
+
+.. code-block:: python
+    
+    def my_filter(text):
+        return text.upper()
+
+    env.hamlish_file_extensions={'upperfilter': my_filter}
+
+
 Environment
 -----------
 *Added in version 0.2.0*
@@ -436,6 +454,37 @@ The lines will not be in the output.
         Tag Content
     </div>
 
+
+Filters
+-------------
+*Added in version 0.3.4*
+
+Filters can be used to pass the content of a block in the template
+through a filter function.
+
+There are no filters included in the extension, but filters can easily be
+added by simply defining a callable that will be called with the content 
+inside the filtered block. The function can do whatever it wants with the 
+content and the returned value will end up in the final template output.
+
+The content inside the filter block will not be parsed as haml. The content
+is passed as is to the filter function.
+
+See the configuration section to learn how to define filters.
+
+.. code-block:: haml
+
+    %div
+        :upperfilter
+            Test
+                Test
+
+.. code-block:: html
+
+    <div>
+    TEST
+        TEST
+    </div>
 
 Example Template
 ================
