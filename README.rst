@@ -120,7 +120,7 @@ Example:
     def my_filter(text):
         return text.upper()
 
-    env.hamlish_file_extensions={'upperfilter': my_filter}
+    env.hamlish_filters={'upperfilter': my_filter}
 
 
 Environment
