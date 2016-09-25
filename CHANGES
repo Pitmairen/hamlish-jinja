@@ -1,6 +1,12 @@
 Hamlish-Jinja Changelog
 ========================
 
+Version 0.3.4
+--------------
+
+- Added support for user defined filters
+
+
 Version 0.3.3
 --------------
 
